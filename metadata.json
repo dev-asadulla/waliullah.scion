@@ -1,0 +1,6 @@
+{
+  "name": "Voss & Kerr — Architectural Studio & Monograph",
+  "description": "Minimalist international architectural studio portfolio and integrated CMS showcasing residential, commercial, interior, landscape, and conceptual architecture.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

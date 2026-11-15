@@ -1,0 +1,260 @@
+{
+  "entities": {
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Global studio identity, hero, about, contact, SEO, navigation, and section visibility settings.",
+      "type": "object",
+      "properties": {
+        "studioName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "logoMark": { "type": "string", "minLength": 1, "maxLength": 24 },
+        "logoImageUrl": { "type": "string", "maxLength": 400000 },
+        "heroTitle": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "heroSubtitle": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "heroImageUrl": { "type": "string", "minLength": 1, "maxLength": 800000 },
+        "heroImageAlt": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "aboutEyebrow": { "type": "string", "maxLength": 80 },
+        "aboutTitle": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "aboutBio": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "aboutPhilosophy": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "aboutApproach": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "aboutExperienceYears": { "type": "number" },
+        "aboutCredentials": { "type": "array" },
+        "aboutPortraitUrl": { "type": "string", "minLength": 1, "maxLength": 800000 },
+        "aboutPortraitAlt": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "contactEmail": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "contactPhone": { "type": "string", "minLength": 3, "maxLength": 60 },
+        "contactLocation": { "type": "string", "minLength": 2, "maxLength": 160 },
+        "socialLinks": { "type": "object" },
+        "footerDescription": { "type": "string", "maxLength": 500 },
+        "copyrightText": { "type": "string", "maxLength": 200 },
+        "seoTitle": { "type": "string", "maxLength": 140 },
+        "seoDescription": { "type": "string", "maxLength": 320 },
+        "faviconUrl": { "type": "string", "maxLength": 100000 },
+        "navLabels": { "type": "object" },
+        "sectionVisibility": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "studioName",
+        "logoMark",
+        "heroTitle",
+        "heroSubtitle",
+        "heroImageUrl",
+        "aboutTitle",
+        "aboutBio",
+        "contactEmail",
+        "contactPhone",
+        "contactLocation",
+        "updatedAt"
+      ]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Architectural portfolio project with metadata, description, category, and media gallery.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "slug": { "type": "string", "minLength": 1, "maxLength": 140, "pattern": "^[a-z0-9\\-]+$" },
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "location": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "year": { "type": "string", "minLength": 2, "maxLength": 16 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "area": { "type": "string", "maxLength": 60 },
+        "client": { "type": "string", "maxLength": 120 },
+        "thumbnailUrl": { "type": "string", "minLength": 1, "maxLength": 800000 },
+        "thumbnailAlt": { "type": "string", "maxLength": 240 },
+        "gallery": { "type": "array" },
+        "published": { "type": "boolean" },
+        "featured": { "type": "boolean" },
+        "displayOrder": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "title",
+        "slug",
+        "category",
+        "location",
+        "year",
+        "summary",
+        "description",
+        "thumbnailUrl",
+        "published",
+        "displayOrder",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Project portfolio category.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "slug": { "type": "string", "minLength": 1, "maxLength": 80, "pattern": "^[a-z0-9\\-]+$" },
+        "displayOrder": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "slug", "displayOrder", "updatedAt"]
+    },
+    "PhilosophyItem": {
+      "title": "PhilosophyItem",
+      "description": "Architectural design philosophy principle.",
+      "type": "object",
+      "properties": {
+        "number": { "type": "string", "minLength": 1, "maxLength": 8 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "displayOrder": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["number", "title", "description", "displayOrder", "updatedAt"]
+    },
+    "ServiceItem": {
+      "title": "ServiceItem",
+      "description": "Architectural studio service offering.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "deliverables": { "type": "array" },
+        "displayOrder": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "description", "displayOrder", "updatedAt"]
+    },
+    "StatItem": {
+      "title": "StatItem",
+      "description": "Studio achievement or numeric metric.",
+      "type": "object",
+      "properties": {
+        "label": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "value": { "type": "number" },
+        "suffix": { "type": "string", "maxLength": 16 },
+        "context": { "type": "string", "maxLength": 120 },
+        "displayOrder": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["label", "value", "displayOrder", "updatedAt"]
+    },
+    "Testimonial": {
+      "title": "Testimonial",
+      "description": "Client testimonial record.",
+      "type": "object",
+      "properties": {
+        "clientName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "designation": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "quote": { "type": "string", "minLength": 1, "maxLength": 1200 },
+        "avatarUrl": { "type": "string", "maxLength": 800000 },
+        "projectRef": { "type": "string", "maxLength": 120 },
+        "displayOrder": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["clientName", "designation", "quote", "displayOrder", "updatedAt"]
+    },
+    "MediaAsset": {
+      "title": "MediaAsset",
+      "description": "Uploaded and optimized studio media asset.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "url": { "type": "string", "minLength": 1, "maxLength": 800000 },
+        "alt": { "type": "string", "maxLength": 240 },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "sizeKb": { "type": "number" },
+        "originalSizeKb": { "type": "number" },
+        "mimeType": { "type": "string", "maxLength": 60 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "url", "alt", "createdAt", "updatedAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Public contact form submission stored with admin-only read access.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "email": { "type": "string", "minLength": 5, "maxLength": 160, "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$" },
+        "projectType": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "budgetRange": { "type": "string", "maxLength": 80 },
+        "message": { "type": "string", "minLength": 10, "maxLength": 3000 },
+        "status": { "type": "string", "enum": ["unread", "read"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "projectType", "message", "status", "createdAt"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Admin CMS activity log entry.",
+      "type": "object",
+      "properties": {
+        "action": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "entityType": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "actorEmail": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["action", "entityType", "summary", "actorEmail", "createdAt"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized studio administrator record.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "minLength": 3, "maxLength": 160 },
+        "role": { "type": "string", "enum": ["admin"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/siteSettings/{settingId}": {
+      "schema": { "$ref": "#/entities/SiteSettings" },
+      "description": "Global studio configuration and website copy."
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "Architectural portfolio projects."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Portfolio project categories."
+    },
+    "/philosophy/{itemId}": {
+      "schema": { "$ref": "#/entities/PhilosophyItem" },
+      "description": "Design philosophy principles."
+    },
+    "/services/{serviceId}": {
+      "schema": { "$ref": "#/entities/ServiceItem" },
+      "description": "Studio service offerings."
+    },
+    "/stats/{statId}": {
+      "schema": { "$ref": "#/entities/StatItem" },
+      "description": "Studio numeric statistics and achievements."
+    },
+    "/testimonials/{testimonialId}": {
+      "schema": { "$ref": "#/entities/Testimonial" },
+      "description": "Client testimonials."
+    },
+    "/media/{mediaId}": {
+      "schema": { "$ref": "#/entities/MediaAsset" },
+      "description": "Studio media library assets."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/Inquiry" },
+      "description": "Contact form submissions with admin-only read/update/delete."
+    },
+    "/activities/{activityId}": {
+      "schema": { "$ref": "#/entities/ActivityLog" },
+      "description": "Admin CMS recent activity log."
+    },
+    "/admins/{uid}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Authorized admin UIDs."
+    }
+  }
+}
