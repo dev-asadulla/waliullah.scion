@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { AdminApp } from './components/admin/AdminApp';
 import { AboutSection } from './components/portfolio/AboutSection';
@@ -20,7 +21,10 @@ import {
   DEFAULT_STATS,
   DEFAULT_TESTIMONIALS,
 } from './data/seedPortfolio';
-import { subscribePublicPortfolio, type PublicPortfolioState } from './lib/portfolioService';
+import {
+  subscribePublicPortfolio,
+  type PublicPortfolioState,
+} from './lib/portfolioService';
 import type { Project } from './types/portfolio';
 
 function isAdminPath(pathname: string): boolean {
@@ -28,7 +32,10 @@ function isAdminPath(pathname: string): boolean {
 }
 
 export default function App() {
-  const [pathname, setPathname] = useState<string>(() => window.location.pathname);
+  const [pathname, setPathname] = useState<string>(
+    () => window.location.pathname
+  );
+
   const isAdminPreviewFrame =
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('adminPreview') === '1' &&
@@ -44,64 +51,115 @@ export default function App() {
     testimonials: DEFAULT_TESTIMONIALS,
     loadedFromFirestore: false,
   });
+
   const [previewIncludeDrafts, setPreviewIncludeDrafts] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [preselectedDiscipline, setPreselectedDiscipline] = useState<string | undefined>(undefined);
+  const [preselectedDiscipline, setPreselectedDiscipline] = useState<
+    string | undefined
+  >(undefined);
 
+  // Handle browser navigation
   useEffect(() => {
     const onPopState = () => setPathname(window.location.pathname);
+
     window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
+
+    return () => {
+      window.removeEventListener('popstate', onPopState);
+    };
   }, []);
 
+  // Subscribe to public portfolio data
   useEffect(() => {
     const unsub = subscribePublicPortfolio((nextState) => {
-      setPortfolio((prev) => (isAdminPreviewFrame && prev.loadedFromFirestore ? prev : nextState));
+      setPortfolio((prev) =>
+        isAdminPreviewFrame && prev.loadedFromFirestore ? prev : nextState
+      );
     });
+
     return () => unsub();
   }, [isAdminPreviewFrame]);
 
+  // Handle admin preview communication
   useEffect(() => {
     if (!isAdminPreviewFrame) return;
+
     const onMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin || event.source !== window.parent) return;
+      if (
+        event.origin !== window.location.origin ||
+        event.source !== window.parent
+      ) {
+        return;
+      }
+
       const msg = event.data;
+
       if (!msg || typeof msg !== 'object') return;
+
       if (msg.type === 'STUDIO_PREVIEW_STATE' && msg.payload) {
         setPortfolio({
           ...msg.payload.state,
           loadedFromFirestore: true,
         });
+
         setPreviewIncludeDrafts(Boolean(msg.payload.includeDrafts));
-      } else if (msg.type === 'STUDIO_PREVIEW_SCROLL' && typeof msg.sectionId === 'string') {
+      } else if (
+        msg.type === 'STUDIO_PREVIEW_SCROLL' &&
+        typeof msg.sectionId === 'string'
+      ) {
         const el = document.getElementById(msg.sectionId);
+
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          el.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
         }
       }
     };
+
     window.addEventListener('message', onMessage);
-    window.parent.postMessage({ type: 'STUDIO_PREVIEW_READY' }, window.location.origin);
-    return () => window.removeEventListener('message', onMessage);
+
+    window.parent.postMessage(
+      { type: 'STUDIO_PREVIEW_READY' },
+      window.location.origin
+    );
+
+    return () => {
+      window.removeEventListener('message', onMessage);
+    };
   }, [isAdminPreviewFrame]);
 
-  // Sync dynamic SEO title, description, and favicon from CMS settings
+  // Keep website title fixed and sync description/favicon from CMS
   useEffect(() => {
-    const { seoTitle, seoDescription, faviconUrl, logoImageUrl } = portfolio.settings;
-    if (seoTitle) {
-      document.title = isAdminPath(pathname) ? `Studio CMS — ${portfolio.settings.studioName}` : seoTitle;
-    }
-    if (seoDescription) {
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', seoDescription);
-    }
-    const activeIcon = (faviconUrl || logoImageUrl || '').trim();
-    if (activeIcon.length > 0) {
-      const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement | null;
-      if (link) link.href = activeIcon;
-    }
-  }, [portfolio.settings, pathname]);
+    document.title = 'Waliullah Scion';
 
+    const { seoDescription, faviconUrl, logoImageUrl } = portfolio.settings;
+
+    if (seoDescription) {
+      const metaDesc = document.querySelector(
+        'meta[name="description"]'
+      );
+
+      if (metaDesc) {
+        metaDesc.setAttribute('content', seoDescription);
+      }
+    }
+
+    const activeIcon = (faviconUrl || logoImageUrl || '').trim();
+
+    if (activeIcon.length > 0) {
+      const link = document.querySelector(
+        "link[rel~='icon']"
+      ) as HTMLLinkElement | null;
+
+      if (link) {
+        link.href = activeIcon;
+      }
+    }
+  }, [portfolio.settings]);
+
+  // Navigate between pages
   const navigateTo = (targetPath: string) => {
     if (window.location.pathname !== targetPath) {
       window.history.pushState({}, '', targetPath);
@@ -110,17 +168,31 @@ export default function App() {
     }
   };
 
+  // Admin route
   if (isAdminPath(pathname)) {
-    return <AdminApp onNavigateHome={() => navigateTo('/')} />;
+    return (
+      <AdminApp onNavigateHome={() => navigateTo('/')} />
+    );
   }
 
-  const { settings, projects, categories, philosophy, services, stats, testimonials } = portfolio;
+  const {
+    settings,
+    projects,
+    categories,
+    philosophy,
+    services,
+    stats,
+    testimonials,
+  } = portfolio;
+
   const vis = settings.sectionVisibility;
 
   const handleInquireFromContext = (disciplineOrProject: string) => {
     setSelectedProject(null);
     setPreselectedDiscipline(disciplineOrProject);
+
     const contactEl = document.querySelector('#contact');
+
     if (contactEl) {
       contactEl.scrollIntoView({ behavior: 'smooth' });
     }
@@ -139,23 +211,31 @@ export default function App() {
           <ProjectsSection
             projects={projects}
             categories={categories}
-            includeUnpublished={isAdminPreviewFrame && previewIncludeDrafts}
+            includeUnpublished={
+              isAdminPreviewFrame && previewIncludeDrafts
+            }
             onSelectProject={(proj) => setSelectedProject(proj)}
           />
         )}
 
-        {vis.philosophy && <PhilosophySection items={philosophy} />}
+        {vis.philosophy && (
+          <PhilosophySection items={philosophy} />
+        )}
 
         {vis.services && (
           <ServicesSection
             services={services}
-            onSelectService={(srvTitle) => handleInquireFromContext(srvTitle)}
+            onSelectService={(srvTitle) =>
+              handleInquireFromContext(srvTitle)
+            }
           />
         )}
 
         {vis.stats && <StatsSection stats={stats} />}
 
-        {vis.testimonials && <TestimonialsSection testimonials={testimonials} />}
+        {vis.testimonials && (
+          <TestimonialsSection testimonials={testimonials} />
+        )}
 
         {vis.contact && (
           <ContactSection
@@ -166,12 +246,17 @@ export default function App() {
         )}
       </main>
 
-      <Footer settings={settings} onNavigateAdmin={() => navigateTo('/admin')} />
+      <Footer
+        settings={settings}
+        onNavigateAdmin={() => navigateTo('/admin')}
+      />
 
       <ProjectModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
-        onInquireAboutProject={(projectTitle) => handleInquireFromContext(projectTitle)}
+        onInquireAboutProject={(projectTitle) =>
+          handleInquireFromContext(projectTitle)
+        }
       />
     </div>
   );
